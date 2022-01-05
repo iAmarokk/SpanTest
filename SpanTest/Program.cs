@@ -30,9 +30,22 @@ namespace SpanTest
             }
 
             [Benchmark]
-            public (int day, int month, int year) DateWithStringSpan()
+            public (int day, int month, int year) DateWithStringReadSpan()
             {
                 ReadOnlySpan<char> dateAsSpan = _dateAsText;
+                var dayAsText = dateAsSpan.Slice(0, 2);
+                var monthAsText = dateAsSpan.Slice(3, 2);
+                var yearAsText = dateAsSpan.Slice(6);
+                var day = int.Parse(dayAsText);
+                var month = int.Parse(monthAsText);
+                var year = int.Parse(yearAsText);
+                return (day, month, year);
+            }
+
+            [Benchmark]
+            public (int day, int month, int year) DateWithStringSpan()
+            {
+                Span<char> dateAsSpan = _dateAsText.ToCharArray();
                 var dayAsText = dateAsSpan.Slice(0, 2);
                 var monthAsText = dateAsSpan.Slice(3, 2);
                 var yearAsText = dateAsSpan.Slice(6);
